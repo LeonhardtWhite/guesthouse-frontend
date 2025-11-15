@@ -2,30 +2,35 @@ import liff from "@line/liff";
 
 const LIFF_ID = import.meta.env.VITE_LIFF_ID;
 
+// We keep our own flag instead of calling liff.isInitialized()
+let initialized = false;
+
 export async function initLiff() {
   if (!LIFF_ID) {
     throw new Error("VITE_LIFF_ID is not set");
   }
 
-  // Always make sure LIFF is initialized first
-  if (!liff.isInitialized()) {
+  // Initialize LIFF only once per page load
+  if (!initialized) {
     await liff.init({ liffId: LIFF_ID });
+    initialized = true;
   }
 
-  // If not logged in yet, trigger login (this will redirect and come back)
+  // If not logged in yet, trigger login (LIFF will redirect back)
   if (!liff.isLoggedIn()) {
     liff.login();
-    // After login redirect, the app will be reloaded, so we can just return here.
+    // After login, the page will reload, so we can just return here.
     return;
   }
 }
 
 export async function getProfile() {
   await initLiff();
-  // If login just happened, this may not run until after redirect.
+  // At this point LIFF should be initialized and logged in.
   return liff.getProfile();
 }
 
+// Optional helper if the app wants to check environment
 export function isInClient(): boolean {
   try {
     return liff.isInClient();
