@@ -141,7 +141,14 @@ async function submitBooking() {
       check_out: form.check_out,
     };
   } catch (error: any) {
-    errorMessage.value = error?.response?.data?.error ?? "預約失敗，請稍後再試";
+    console.error("Booking failed", error);
+    if (error && typeof error === "object" && typeof error.message === "string" && error.message) {
+      errorMessage.value = error.message;
+    } else if (error?.response?.data?.error) {
+      errorMessage.value = error.response.data.error;
+    } else {
+      errorMessage.value = "預約失敗，請稍後再試";
+    }
   } finally {
     submitting.value = false;
   }
