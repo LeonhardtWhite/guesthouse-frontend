@@ -205,7 +205,7 @@ onMounted(() => {
             <ul class="space-y-1">
               <li v-for="room in rooms" :key="room.id" class="flex justify-between text-gray-600">
                 <span>{{ room.name }}</span>
-                <span>可入住 {{ room.capacity ?? '-' }} 人 / {{ room.total_rooms }} 間</span>
+                <span>可入住 {{ room.capacity ?? '-' }} 人 / 共 {{ room.total_rooms }} 間</span>
               </li>
             </ul>
           </div>
@@ -244,7 +244,7 @@ onMounted(() => {
               <option value="family">家庭房</option>
             </select>
             <p v-if="selectedRoom" class="mt-1 text-xs text-gray-500">
-              最多 {{ selectedRoom.capacity ?? "-" }} 人，共 {{ selectedRoom.total_rooms }} 間可訂。
+              最多 {{ selectedRoom.capacity ?? "-" }} 人，總計 {{ selectedRoom.total_rooms }} 間房可訂。
             </p>
           </div>
 
